@@ -1,46 +1,65 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+let express = require('express');
+const app = express();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+let cors = require('cors');
+let logger = require('morgan');
+let createError = require('http-errors');
+let cookieParser = require('cookie-parser');
 
-var mongoose = require("mongoose")
-mongoose.connect('mongodb://mongodb:27017/test', {useNewUrlParser: true})
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Conn error'));
-
-db.once('open', function() {
-  console.log("Connection with database was successful")
-})
-
-var app = express();
-
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+let swaggerJsDoc = require("swagger-jsdoc");
+let swaggerUi = require("swagger-ui-express");
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    components: {},
+    securityDefinitions: {
+      auth: {
+        type: 'apiKey',
+        name: 'Authorization'
+      }
+    },
+    security: [{
+      auth: []
+    }],
+    info: {
+      version: "1.0.0",
+      title: "App",
+      description: "App",
+      servers: ["http://localhost:5000"]
+    }
+  },
+  apis: ['./docs/*.js']
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
+const { usersRoutes } = require('./routes');
+app.use('/users', usersRoutes);
 
 // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+// error handler
+app.use((err, req, res, next) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-
-//   res.status(err.status || 500);
-// });
+  // render the error page
+  res.status(err.status || 500).json({
+    status: err.status,
+    message: err.message
+  })
+});
 
 module.exports = app;
