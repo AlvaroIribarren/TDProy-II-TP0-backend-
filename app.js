@@ -40,9 +40,14 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+//Routes
+const indexRoute = require('./routes/index')
+const usersRoutes = require('./routes/users');
+const dataRoute = require('./routes/data')
 
-const { usersRoutes } = require('./routes');
+app.use('/', indexRoute);
 app.use('/users', usersRoutes);
+app.use('/data', dataRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
