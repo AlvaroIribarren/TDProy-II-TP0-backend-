@@ -1,10 +1,19 @@
 const csv = require('csv-parser')
 const https = require("https"); 
 const { Vaccine } = require('../models');
-
-//FECHA_ADMINISTRACION, GRUPO_ETARIO, GENERO, VACUNA, TIPO_EFECTOR, DOSIS_1, DOSIS_2, ID_CARGA
+const buildQuery = require('../queries/vaccines.query')
 
 class VaccinesDataService {
+
+  async find(filter) {
+    try {
+      const query = buildQuery(filter)
+      const res = await Vaccine.find(query)
+      return res
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   async loadFromUrl(url) {
     const data = []
