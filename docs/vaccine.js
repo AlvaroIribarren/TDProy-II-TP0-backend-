@@ -12,9 +12,10 @@
  *    summary: Get vaccines
  *    parameters:
  *      - in: query
- *        name: TIPO_EFECTOR
+ *        name: vaccine
  *        schema:
- *          type: string     
+ *          type: string  
+ *        description: El nombre de la vacuna. Ej 'Sputnik'   
  *    responses:
  *      '200':
  *        description: OK             

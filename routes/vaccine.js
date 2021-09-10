@@ -4,7 +4,7 @@ const VaccineService = require('../services/vaccine');
 
 router.get('/', async (req, res, next) => {
   const vaccines = await VaccineService.find(req.query)
-  res.status(200).json(vaccines.length)
+  res.status(200).json(vaccines)
 });
 
 module.exports = router;
