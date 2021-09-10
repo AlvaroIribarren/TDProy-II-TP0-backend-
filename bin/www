@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('back-tdp-ii:server');
 var http = require('http');
 const mongoose = require('mongoose');
+const VaccineService = require('../services/vaccine')
+
 require('dotenv').config();
 
 /**
@@ -94,7 +96,12 @@ function onListening() {
     useNewUrlParser: true,
     connectTimeoutMS: 10000,
     useUnifiedTopology: true,
-  }).then(() => {
+  }).then(async () => {
     debug('Connected to MongoDB');
+
+    const url = "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/salud/plan-de-vacunacion-covid-19/dataset_total_vacunas.csv"
+    await VaccineService.loadFromUrl(url);
+    console.log('CSV Cargado.')
+
   });
 }
