@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const vaccineSchema = mongoose.Schema({
   FECHA_ADMINISTRACION: {
-    type: String,
+    type: Date,
   },
   GRUPO_ETARIO: {
     type: String,

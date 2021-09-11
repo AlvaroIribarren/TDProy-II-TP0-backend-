@@ -26,13 +26,26 @@ class VaccinesDataService {
           skip_empty_lines: true
         })
       ).on('data', row => {
-        data.push(row)
+        const formattedRow = formatRow(row);
+        data.push(formattedRow)
       }).on('end', async function() {
         await Vaccine.deleteMany({});
         await Vaccine.insertMany(data);
         console.log("Carga terminada, hay un total de " + data.length + " filas.")
       })
     }).end();
+  }
+}
+
+const formatRow = (row) => {
+  //Current format: DDMMMYYYY:00:00:00 (hour always the same)
+  const { FECHA_ADMINISTRACION ,...rest} = row;
+  const day = FECHA_ADMINISTRACION.substring(0, 2);
+  const month = FECHA_ADMINISTRACION.substring(2, 5);
+  const year = FECHA_ADMINISTRACION.substring(5, 9);
+  return {
+    FECHA_ADMINISTRACION: new Date(`${year}-${month}-${day}`),
+    ...rest
   }
 }
 
