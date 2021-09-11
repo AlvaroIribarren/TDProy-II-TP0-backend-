@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { paginate } = require('./plugins');
 
 const vaccineSchema = mongoose.Schema({
   FECHA_ADMINISTRACION: {
@@ -26,6 +27,8 @@ const vaccineSchema = mongoose.Schema({
     type: String,
   },
 });
+
+vaccineSchema.plugin(paginate)
 
 const Vaccine = mongoose.model('Vaccine', vaccineSchema)
 module.exports = Vaccine;

@@ -12,6 +12,16 @@
  *    summary: Get vaccines
  *    parameters:
  *      - in: query
+ *        name: page
+ *        schema:
+ *          type: string
+ *        description: Page number
+ *      - in: query
+ *        name: limit
+ *        schema:
+ *          type: string
+ *        description: Results per page
+ *      - in: query
  *        name: vaccine
  *        schema:
  *          type: string  
@@ -20,12 +30,12 @@
  *        name: from
  *        schema:
  *          type: string
- *        description: Fecha inicial
+ *        description: Fecha inicial (YYYY-MM-DD)
  *      - in: query
  *        name: to
  *        schema:
  *          type: string
- *        description: Fecha final
+ *        description: Fecha final (YYYY-MM-DD)
  *      - in: query
  *        name: type
  *        schema:

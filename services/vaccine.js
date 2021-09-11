@@ -8,7 +8,11 @@ class VaccinesDataService {
   async find(filter) {
     try {
       const query = buildQuery(filter)
-      const res = await Vaccine.find(query)
+      const res = await Vaccine.paginate(query, {
+        sortBy: filter.sortBy ? filter.sortBy : 'FECHA_ADMINISTRACION:asc',
+        limit: filter.limit ? filter.limit : 20000,
+        page: filter.page ? filter.page : 1
+      })
       return res
     } catch (err) {
       console.log(err)
