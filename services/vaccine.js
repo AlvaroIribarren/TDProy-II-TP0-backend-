@@ -48,7 +48,11 @@ class VaccinesDataService {
           firstVaccinated: { $sum: '$DOSIS_1' },
           secondVaccinated: { $sum: '$DOSIS_2' },
         }},
-        { $sort: { "_id.year": 1, "_id.month": 1 }}
+        { $sort: { "_id.year": 1, "_id.month": 1 }},
+        { $addFields: { month: '$_id.month', year: '$_id.year' } },
+        { $project: {
+          firstVaccinated: 1, secondVaccinated: 1, month: 1, year: 1, _id: 0
+        }}
       ])
       return res
     } catch (err) {
