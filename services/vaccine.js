@@ -38,6 +38,24 @@ class VaccinesDataService {
     }
   }
 
+  async findDosesNumbersBucketed(filter) {
+    try {
+      const query = buildQuery(filter)
+      const res = await Vaccine.aggregate([
+        { $match: query },
+        { $group: {
+          _id: { month: { $month: '$FECHA_ADMINISTRACION' }, year: { $year: '$FECHA_ADMINISTRACION' } },
+          firstVaccinated: { $sum: '$DOSIS_1' },
+          secondVaccinated: { $sum: '$DOSIS_2' },
+        }},
+        { $sort: { "_id.year": 1, "_id.month": 1 }}
+      ])
+      return res
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   async loadFromUrl(url) {
     const data = []
     https.request(url, response => {

@@ -12,4 +12,9 @@ router.get('/pie', async (req, res, next) => {
   res.status(200).json(vaccines)
 });
 
+router.get('/lines', async (req, res, next) => {
+  const vaccines = await VaccineService.findDosesNumbersBucketed(req.query)
+  res.status(200).json(vaccines)
+});
+
 module.exports = router;
