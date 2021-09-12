@@ -19,6 +19,25 @@ class VaccinesDataService {
     }
   }
 
+  async findDosesNumbers(filter) {
+    try {
+      const query = buildQuery(filter)
+      const res = await Vaccine.aggregate([
+        { $match: query },
+        { $group: {
+          _id: null,
+          firstVaccinated: { $sum: '$DOSIS_1' },
+          secondVaccinated: { $sum: '$DOSIS_2' },
+        }},
+      ])
+      const result = res[0];
+      delete result._id;
+      return result
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   async loadFromUrl(url) {
     const data = []
     https.request(url, response => {
@@ -43,12 +62,14 @@ class VaccinesDataService {
 
 const formatRow = (row) => {
   //Current format: DDMMMYYYY:00:00:00 (hour always the same)
-  const { FECHA_ADMINISTRACION ,...rest} = row;
+  const { FECHA_ADMINISTRACION , DOSIS_1, DOSIS_2, ...rest} = row;
   const day = FECHA_ADMINISTRACION.substring(0, 2);
   const month = FECHA_ADMINISTRACION.substring(2, 5);
   const year = FECHA_ADMINISTRACION.substring(5, 9);
   return {
     FECHA_ADMINISTRACION: new Date(`${year}-${month}-${day}`),
+    DOSIS_1: parseInt(DOSIS_1),
+    DOSIS_2: parseInt(DOSIS_2),
     ...rest
   }
 }

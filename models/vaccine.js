@@ -18,10 +18,10 @@ const vaccineSchema = mongoose.Schema({
     type: String,
   },
   DOSIS_1: {
-    type: String,
+    type: Number,
   },
   DOSIS_2: {
-    type: String,
+    type: Number,
   },
   ID_CARGA: {
     type: String,

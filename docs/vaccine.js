@@ -56,3 +56,31 @@
  *        description: OK             
  *        
  */
+
+/**
+ * @swagger
+ * /pie:
+ *  get:
+ *    tags: [Vaccine]
+ *    summary: Get first and second doses for the filters applied
+ *    parameters:
+ *      - in: query
+ *        name: vaccine
+ *        schema:
+ *          type: string  
+ *        description: El nombre de la vacuna. Ej 'Sputnik'
+ *      - in: query
+ *        name: from
+ *        schema:
+ *          type: string
+ *        description: Fecha inicial (YYYY-MM-DD)
+ *      - in: query
+ *        name: to
+ *        schema:
+ *          type: string
+ *        description: Fecha final (YYYY-MM-DD)
+ *    responses:
+ *      '200':
+ *        description: OK
+ *
+ */
