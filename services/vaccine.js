@@ -30,6 +30,13 @@ class VaccinesDataService {
           secondVaccinated: { $sum: '$DOSIS_2' },
         }},
       ])
+      console.log(res)
+      if (res.length === 0) {
+        return {
+          firstVaccinated: 0,
+          secondVaccinated: 0
+        }
+      }
       const result = res[0];
       delete result._id;
       return result
